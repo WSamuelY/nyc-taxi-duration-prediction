@@ -120,6 +120,6 @@ is minimal, ensuring fair and realistic evaluation.
 
 ## Author
 
-**[Your Name Here]**
+**[Samuel Omoyayi]**
 Data Science Student
-GitHub: [Your GitHub URL Here]
+GitHub: [https://github.com/WSamuelY/nyc-taxi-duration-prediction]
