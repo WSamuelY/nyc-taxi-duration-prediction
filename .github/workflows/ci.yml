@@ -1,0 +1,88 @@
+# ============================================================
+# .github/workflows/ci.yml
+# GitHub Actions CI/CD Pipeline
+#
+# PURPOSE:
+#   Automatically run unit tests on every push and pull request
+#   to the main branch. This ensures code quality is maintained
+#   throughout the project lifecycle.
+#
+# TRIGGERS:
+#   - Every push to 'main' branch
+#   - Every pull request targeting 'main'
+#
+# PIPELINE STEPS:
+#   1. Set up Python 3.11
+#   2. Install all dependencies from requirements.txt
+#   3. Run pytest with verbose output and coverage report
+#   4. Upload coverage report as an artifact
+# ============================================================
+
+name: NYC Taxi ML Pipeline — CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.11"]   # Test on Python 3.11
+
+    steps:
+
+      # ── Step 1: Checkout repository ──────────────────────
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # ── Step 2: Set up Python ─────────────────────────────
+      - name: Set Up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"    # Cache pip packages to speed up future runs
+
+      # ── Step 3: Install dependencies ──────────────────────
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov   # Testing framework + coverage
+
+      # ── Step 4: Run lint check ────────────────────────────
+      # flake8 catches syntax errors and obvious bugs
+      - name: Lint with flake8
+        run: |
+          pip install flake8
+          # Stop build if there are Python syntax errors or undefined names
+          flake8 src/ tests/ --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Warn on other style issues (don't fail build for these)
+          flake8 src/ tests/ --count --exit-zero --max-complexity=10 --max-line-length=100 --statistics
+
+      # ── Step 5: Run unit tests ────────────────────────────
+      - name: Run Tests with pytest
+        run: |
+          pytest tests/ \
+            -v \
+            --tb=short \
+            --cov=src \
+            --cov-report=term-missing \
+            --cov-report=xml:coverage.xml
+
+      # ── Step 6: Upload coverage report ───────────────────
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
+          retention-days: 7
+
+  # ── Optional: Notify on failure ──────────────────────────
+  # You can add a Slack or email notification step here
+  # if you want alerts when the pipeline fails

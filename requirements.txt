@@ -1,0 +1,47 @@
+# ============================================================
+# requirements.txt
+# NYC Yellow Taxi Trip Duration Prediction Project
+# Install with: pip install -r requirements.txt
+# ============================================================
+
+# --- Core Data Science ---
+pandas>=2.1.0
+numpy>=1.26.0
+pyarrow>=14.0.0          # Required to read .parquet files
+fastparquet>=2023.10.0   # Alternative parquet engine
+
+# --- Visualization ---
+matplotlib>=3.8.0
+seaborn>=0.13.0
+plotly>=5.18.0           # Interactive charts
+
+# --- Machine Learning ---
+scikit-learn>=1.3.0      # Linear models, pipelines, metrics
+lightgbm>=4.1.0          # LightGBM gradient boosting
+xgboost>=2.0.0           # XGBoost (optional comparison)
+
+# --- Model Persistence ---
+joblib>=1.3.0            # Save/load models
+
+# --- Progress Bars ---
+tqdm>=4.66.0             # Progress tracking for downloads/loops
+
+# --- HTTP Requests (for downloading data) ---
+requests>=2.31.0
+
+# --- Geospatial (optional: for zone coordinate mapping) ---
+geopy>=2.4.0             # Distance calculations between coordinates
+
+# --- Testing ---
+pytest>=7.4.0
+
+# --- Notebook Support (optional) ---
+jupyter>=1.0.0
+ipykernel>=6.26.0
+
+# --- API Serving (optional bonus) ---
+fastapi>=0.104.0
+uvicorn>=0.24.0
+
+# --- Dashboard (optional bonus) ---
+streamlit>=1.28.0
